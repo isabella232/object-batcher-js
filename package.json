@@ -1,0 +1,28 @@
+{
+  "name": "object-batcher-js",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublish": "npm test && npm run build",
+    "semantic-release": "CI=true semantic-release pre && npm publish --access public && semantic-release post"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emartech/object-batcher-js.git"
+  },
+  "release": {
+      "verifyConditions": {
+        "path": "./node_modules/semantic-release/src/lib/plugin-noop.js"
+      }
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/emartech/object-batcher-js/issues"
+  },
+  "homepage": "https://github.com/emartech/object-batcher-js#readme",
+  "devDependencies": {
+    "semantic-release": "6.3.6"
+  }
+}
