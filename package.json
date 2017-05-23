@@ -4,7 +4,6 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --reporter spec",
-    "prepublish": "npm test && npm run build",
     "semantic-release": "CI=true semantic-release pre && npm publish --access public && semantic-release post"
   },
   "repository": {
