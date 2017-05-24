@@ -13,9 +13,7 @@ const options = {
 };
 
 describe('RequestCollector', function() {
-
   describe('add', function() {
-
     beforeEach(function() {
       // eslint-disable-next-line no-undef
       this.clock = sinon.useFakeTimers();
@@ -73,7 +71,7 @@ describe('RequestCollector', function() {
       expect(this.batches[1].data[5]).to.eql({ bar: 5 });
     });
 
-    it('should\'nt call callback when batch size is smaller than 10', function() {
+    it("should'nt call callback when batch size is smaller than 10", function() {
       this.requestCollector.add(primaryKey, { foo: 0 });
       for (var i = 1; i < 10; i++) {
         this.requestCollector.add(primaryKey, { foo: i });
@@ -119,7 +117,7 @@ describe('RequestCollector', function() {
       expect(this.batches[1].data[1]).to.eql({ bar: 1 });
     });
 
-    it('should\'nt call callback after batch timeout when batch is empty', function() {
+    it("should'nt call callback after batch timeout when batch is empty", function() {
       for (var i = 0; i < 10; i++) {
         this.requestCollector.add(primaryKey, { foo: i });
       }
@@ -128,6 +126,5 @@ describe('RequestCollector', function() {
 
       expect(this.batches.length).to.eql(1);
     });
-
   });
 });
