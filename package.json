@@ -1,5 +1,5 @@
 {
-  "name": "object-batcher-js",
+  "name": "@emartech/object-batcher-js",
   "description": "",
   "main": "index.js",
   "scripts": {
