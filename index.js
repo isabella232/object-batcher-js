@@ -1,6 +1,6 @@
 'use strict';
 
-class RequestCollector {
+class ObjectBatcher {
   constructor(callback, options = { batchSize: 10, batchTimeout: 10000 }) {
     this._batchSize = options.batchSize;
     this._batchTimeout = options.batchTimeout;
@@ -39,4 +39,4 @@ class RequestCollector {
   }
 }
 
-module.exports = RequestCollector;
+module.exports = ObjectBatcher;

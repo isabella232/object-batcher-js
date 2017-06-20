@@ -3,7 +3,7 @@
 var expect = require('chai').expect;
 var sinon = require('sinon');
 
-const RequestCollector = require('../index.js');
+const ObjectBatcher = require('../index.js');
 const primaryKey = 1;
 const primaryKey2 = 2;
 
@@ -12,7 +12,7 @@ const options = {
   batchSize: 10
 };
 
-describe('RequestCollector', function() {
+describe('ObjectBatcher', function() {
   describe('add', function() {
     beforeEach(function() {
       // eslint-disable-next-line no-undef
@@ -22,7 +22,7 @@ describe('RequestCollector', function() {
         this.batches.push({ primaryKey, data });
       };
 
-      this.requestCollector = new RequestCollector(this.callback, options);
+      this.objectBatcher = new ObjectBatcher(this.callback, options);
     });
 
     afterEach(function() {
@@ -31,7 +31,7 @@ describe('RequestCollector', function() {
 
     it('should call callback when batch size reached 10', function() {
       for (var i = 0; i < 10; i++) {
-        this.requestCollector.add(primaryKey, { foo: i });
+        this.objectBatcher.add(primaryKey, { foo: i });
       }
 
       expect(this.batches.length).to.eql(1);
@@ -42,7 +42,7 @@ describe('RequestCollector', function() {
 
     it('should call callback twice with proper data', function() {
       for (var i = 0; i < 21; i++) {
-        this.requestCollector.add(primaryKey, { foo: i });
+        this.objectBatcher.add(primaryKey, { foo: i });
       }
 
       expect(this.batches.length).to.eql(2);
@@ -57,8 +57,8 @@ describe('RequestCollector', function() {
 
     it('should call callback twice with proper data', function() {
       for (var i = 0; i < 11; i++) {
-        this.requestCollector.add(primaryKey, { foo: i });
-        this.requestCollector.add(primaryKey2, { bar: i });
+        this.objectBatcher.add(primaryKey, { foo: i });
+        this.objectBatcher.add(primaryKey2, { bar: i });
       }
 
       expect(this.batches.length).to.eql(2);
@@ -72,10 +72,10 @@ describe('RequestCollector', function() {
     });
 
     it("should'nt call callback when batch size is smaller than 10", function() {
-      this.requestCollector.add(primaryKey, { foo: 0 });
+      this.objectBatcher.add(primaryKey, { foo: 0 });
       for (var i = 1; i < 10; i++) {
-        this.requestCollector.add(primaryKey, { foo: i });
-        this.requestCollector.add(primaryKey2, { foo: i });
+        this.objectBatcher.add(primaryKey, { foo: i });
+        this.objectBatcher.add(primaryKey2, { foo: i });
       }
 
       expect(this.batches.length).to.eql(1);
@@ -85,7 +85,7 @@ describe('RequestCollector', function() {
     });
 
     it('should call callback after batch timeout', function() {
-      this.requestCollector.add(primaryKey, { foo: 0 });
+      this.objectBatcher.add(primaryKey, { foo: 0 });
 
       expect(this.batches.length).to.eql(0);
 
@@ -98,9 +98,9 @@ describe('RequestCollector', function() {
     });
 
     it('should call callback after batch timeout for multiple primaryKeys', function() {
-      this.requestCollector.add(primaryKey, { foo: 0 });
-      this.requestCollector.add(primaryKey2, { bar: 0 });
-      this.requestCollector.add(primaryKey2, { bar: 1 });
+      this.objectBatcher.add(primaryKey, { foo: 0 });
+      this.objectBatcher.add(primaryKey2, { bar: 0 });
+      this.objectBatcher.add(primaryKey2, { bar: 1 });
 
       expect(this.batches.length).to.eql(0);
 
@@ -119,7 +119,7 @@ describe('RequestCollector', function() {
 
     it("should'nt call callback after batch timeout when batch is empty", function() {
       for (var i = 0; i < 10; i++) {
-        this.requestCollector.add(primaryKey, { foo: i });
+        this.objectBatcher.add(primaryKey, { foo: i });
       }
 
       this.clock.tick(options.batchTimeout * 3);
