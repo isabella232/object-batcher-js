@@ -27,6 +27,7 @@ class ObjectBatcher {
 
   resetState() {
     this._batches = {};
+    this._primaryKeys = [];
     clearTimeout(this._timeoutId);
     this._timeoutId = setTimeout(this._flushAll.bind(this), this._batchTimeout);
   }

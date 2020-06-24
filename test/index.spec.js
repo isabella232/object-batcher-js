@@ -152,5 +152,16 @@ describe('ObjectBatcher', function() {
       this.clock.tick(options.batchTimeout / 2);
       expect(this.batches.length).to.eql(1);
     });
+
+    it('should forget list of primaryKeys after reset', function () {
+      this.objectBatcher.add(primaryKey, { foo: 0 });
+
+      this.objectBatcher.resetState();
+      this.objectBatcher.add(primaryKey2, { foo: 1 });
+
+      this.clock.tick(options.batchTimeout);
+
+      expect(this.batches.length).to.eql(1);
+    });
   });
 });
