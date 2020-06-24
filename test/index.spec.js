@@ -13,22 +13,22 @@ const options = {
 };
 
 describe('ObjectBatcher', function() {
+  beforeEach(function() {
+    // eslint-disable-next-line no-undef
+    this.clock = sinon.useFakeTimers();
+    this.batches = [];
+    this.callback = (primaryKey, data) => {
+      this.batches.push({ primaryKey, data });
+    };
+
+    this.objectBatcher = new ObjectBatcher(this.callback, options);
+  });
+
+  afterEach(function() {
+    this.clock.restore();
+  });
+
   describe('add', function() {
-    beforeEach(function() {
-      // eslint-disable-next-line no-undef
-      this.clock = sinon.useFakeTimers();
-      this.batches = [];
-      this.callback = (primaryKey, data) => {
-        this.batches.push({ primaryKey, data });
-      };
-
-      this.objectBatcher = new ObjectBatcher(this.callback, options);
-    });
-
-    afterEach(function() {
-      this.clock.restore();
-    });
-
     it('should call callback when batch size reached 10', function() {
       for (var i = 0; i < 10; i++) {
         this.objectBatcher.add(primaryKey, { foo: i });
@@ -124,6 +124,32 @@ describe('ObjectBatcher', function() {
 
       this.clock.tick(options.batchTimeout * 3);
 
+      expect(this.batches.length).to.eql(1);
+    });
+  });
+
+  describe('resetState', function() {
+    it('should not call callback with items added before a resetState', function () {
+      this.objectBatcher.add(primaryKey, { before: 'reset' });
+
+      this.objectBatcher.resetState();
+
+      this.objectBatcher.add(primaryKey, { after: 'reset' });
+      this.clock.tick(options.batchTimeout);
+
+      expect(this.batches).to.eql([{ primaryKey: 1, data: [{ after: 'reset'}] }])
+    });
+
+    it('should reset timeout after a resetState', function () {
+      this.clock.tick(options.batchTimeout / 2);
+
+      this.objectBatcher.resetState();
+      this.objectBatcher.add(primaryKey, { foo: 0 });
+
+      this.clock.tick(options.batchTimeout / 2);
+      expect(this.batches).to.eql([]);
+
+      this.clock.tick(options.batchTimeout / 2);
       expect(this.batches.length).to.eql(1);
     });
   });

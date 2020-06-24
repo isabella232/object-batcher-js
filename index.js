@@ -9,7 +9,7 @@ class ObjectBatcher {
     this._batches = {};
 
     this._primaryKeys = [];
-    setTimeout(this._flushAll.bind(this), this._batchTimeout);
+    this._timeoutId = setTimeout(this._flushAll.bind(this), this._batchTimeout);
   }
 
   add(primaryKey, data) {
@@ -25,6 +25,12 @@ class ObjectBatcher {
     }
   }
 
+  resetState() {
+    this._batches = {};
+    clearTimeout(this._timeoutId);
+    this._timeoutId = setTimeout(this._flushAll.bind(this), this._batchTimeout);
+  }
+
   _flush(primaryKey) {
     if (this._batches[primaryKey].length === 0) {
       return;
@@ -35,7 +41,7 @@ class ObjectBatcher {
 
   _flushAll() {
     this._primaryKeys.forEach(this._flush.bind(this));
-    setTimeout(this._flushAll.bind(this), this._batchTimeout);
+    this._timeoutId = setTimeout(this._flushAll.bind(this), this._batchTimeout);
   }
 }
 
