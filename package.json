@@ -11,9 +11,9 @@
     "url": "git+https://github.com/emartech/object-batcher-js.git"
   },
   "release": {
-      "verifyConditions": {
-        "path": "./node_modules/semantic-release/src/lib/plugin-noop.js"
-      }
+    "verifyConditions": {
+      "path": "./node_modules/semantic-release/src/lib/plugin-noop.js"
+    }
   },
   "author": "",
   "license": "MIT",
@@ -22,14 +22,14 @@
   },
   "homepage": "https://github.com/emartech/object-batcher-js#readme",
   "devDependencies": {
-    "chai": "3.5.0",
-    "chai-as-promised": "6.0.0",
-    "chai-string": "1.3.0",
-    "chai-subset": "1.5.0",
-    "eslint-config-emarsys": "4.0.0",
-    "mocha": "3.3.0",
-    "sinon": "2.2.0",
-    "sinon-chai": "2.10.0",
-    "semantic-release": "6.3.6"
+    "chai": "4.2.0",
+    "chai-as-promised": "7.1.1",
+    "chai-string": "1.5.0",
+    "chai-subset": "1.6.0",
+    "eslint-config-emarsys": "5.1.0",
+    "mocha": "8.1.3",
+    "sinon": "9.0.3",
+    "sinon-chai": "3.5.0",
+    "semantic-release": "17.1.2"
   }
 }

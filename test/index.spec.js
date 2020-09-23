@@ -12,8 +12,8 @@ const options = {
   batchSize: 10
 };
 
-describe('ObjectBatcher', function() {
-  beforeEach(function() {
+describe('ObjectBatcher', function () {
+  beforeEach(function () {
     // eslint-disable-next-line no-undef
     this.clock = sinon.useFakeTimers();
     this.batches = [];
@@ -24,12 +24,12 @@ describe('ObjectBatcher', function() {
     this.objectBatcher = new ObjectBatcher(this.callback, options);
   });
 
-  afterEach(function() {
+  afterEach(function () {
     this.clock.restore();
   });
 
-  describe('add', function() {
-    it('should call callback when batch size reached 10', function() {
+  describe('add', function () {
+    it('should call callback when batch size reached 10', function () {
       for (var i = 0; i < 10; i++) {
         this.objectBatcher.add(primaryKey, { foo: i });
       }
@@ -40,7 +40,7 @@ describe('ObjectBatcher', function() {
       expect(this.batches[0].data[5]).to.eql({ foo: 5 });
     });
 
-    it('should call callback twice with proper data', function() {
+    it('should call callback twice with proper data', function () {
       for (var i = 0; i < 21; i++) {
         this.objectBatcher.add(primaryKey, { foo: i });
       }
@@ -55,7 +55,7 @@ describe('ObjectBatcher', function() {
       expect(this.batches[1].data[5]).to.eql({ foo: 15 });
     });
 
-    it('should call callback twice with proper data', function() {
+    it('should call callback twice with proper data', function () {
       for (var i = 0; i < 11; i++) {
         this.objectBatcher.add(primaryKey, { foo: i });
         this.objectBatcher.add(primaryKey2, { bar: i });
@@ -71,7 +71,7 @@ describe('ObjectBatcher', function() {
       expect(this.batches[1].data[5]).to.eql({ bar: 5 });
     });
 
-    it("should'nt call callback when batch size is smaller than 10", function() {
+    it("should'nt call callback when batch size is smaller than 10", function () {
       this.objectBatcher.add(primaryKey, { foo: 0 });
       for (var i = 1; i < 10; i++) {
         this.objectBatcher.add(primaryKey, { foo: i });
@@ -84,7 +84,7 @@ describe('ObjectBatcher', function() {
       expect(this.batches[0].data[5]).to.eql({ foo: 5 });
     });
 
-    it('should call callback after batch timeout', function() {
+    it('should call callback after batch timeout', function () {
       this.objectBatcher.add(primaryKey, { foo: 0 });
 
       expect(this.batches.length).to.eql(0);
@@ -97,7 +97,7 @@ describe('ObjectBatcher', function() {
       expect(this.batches[0].data[0]).to.eql({ foo: 0 });
     });
 
-    it('should call callback after batch timeout for multiple primaryKeys', function() {
+    it('should call callback after batch timeout for multiple primaryKeys', function () {
       this.objectBatcher.add(primaryKey, { foo: 0 });
       this.objectBatcher.add(primaryKey2, { bar: 0 });
       this.objectBatcher.add(primaryKey2, { bar: 1 });
@@ -117,7 +117,7 @@ describe('ObjectBatcher', function() {
       expect(this.batches[1].data[1]).to.eql({ bar: 1 });
     });
 
-    it("should'nt call callback after batch timeout when batch is empty", function() {
+    it("should'nt call callback after batch timeout when batch is empty", function () {
       for (var i = 0; i < 10; i++) {
         this.objectBatcher.add(primaryKey, { foo: i });
       }
@@ -128,7 +128,7 @@ describe('ObjectBatcher', function() {
     });
   });
 
-  describe('resetState', function() {
+  describe('resetState', function () {
     it('should not call callback with items added before a resetState', function () {
       this.objectBatcher.add(primaryKey, { before: 'reset' });
 
@@ -137,7 +137,7 @@ describe('ObjectBatcher', function() {
       this.objectBatcher.add(primaryKey, { after: 'reset' });
       this.clock.tick(options.batchTimeout);
 
-      expect(this.batches).to.eql([{ primaryKey: 1, data: [{ after: 'reset'}] }])
+      expect(this.batches).to.eql([{ primaryKey: 1, data: [{ after: 'reset' }] }]);
     });
 
     it('should reset timeout after a resetState', function () {
