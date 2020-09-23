@@ -10,11 +10,6 @@
     "type": "git",
     "url": "git+https://github.com/emartech/object-batcher-js.git"
   },
-  "release": {
-    "verifyConditions": {
-      "path": "./node_modules/semantic-release/src/lib/plugin-noop.js"
-    }
-  },
   "author": "",
   "license": "MIT",
   "bugs": {
