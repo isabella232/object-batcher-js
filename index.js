@@ -1,9 +1,10 @@
 'use strict';
 
 class ObjectBatcher {
-  constructor(callback, options = { batchSize: 10, batchTimeout: 10000 }) {
+  constructor(callback, options = { batchSize: 10, batchTimeout: 10000, prefetchCount }) {
     this._batchSize = options.batchSize;
     this._batchTimeout = options.batchTimeout;
+    this._prefetchCount = options.prefetchCount;
 
     this._callback = callback;
     this._batches = {};
@@ -22,6 +23,23 @@ class ObjectBatcher {
 
     if (this._batches[primaryKey].length >= this._batchSize) {
       this._flush(primaryKey);
+    }
+
+    this._flushIfPrefecthCountReached();
+  }
+
+  _flushIfPrefecthCountReached() {
+    if (!this._prefetchCount) return;
+
+    const { itemCount, biggestPrimaryKey } = this._primaryKeys.reduce((memo, primaryKey) => {
+      return {
+        itemCount: memo.itemCount += this._batches[primaryKey].length,
+        biggestPrimaryKey: this._batches[primaryKey].length > this._batches[memo.biggestPrimaryKey].length ? primaryKey : memo.biggestPrimaryKey
+      }
+    }, { itemCount: 0, biggestPrimaryKey: this._primaryKeys[0] })
+
+    if (itemCount >=this._prefetchCount) {
+      this._flush(biggestPrimaryKey);
     }
   }
 

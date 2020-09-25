@@ -11,11 +11,13 @@ const ObjectBatcher = require('@emartech/object-batcher-js');
 
 const objectBatcher = new ObjectBatcher(callback_fn, {
   batchSize,
-  batchTimeout
+  batchTimeout,
+  [prefetchCount]
 });
 ```
 
-The callback function will be called after the batchTimeout expires or the pushed items count reaches the set batchSize.
+The callback function will be called after the `batchTimeout` expires or the pushed items count reaches the set `batchSize` or the overall pushed items count reaches the given `prefecthCount`.
+
 
 ## Pushing an item into the object batcher
 
@@ -36,4 +38,4 @@ state from previous run does not interfere with the current one.
 
 ---
 
-Copyright EMARSYS 2018 All rights reserved.
+Copyright EMARSYS 2020 All rights reserved.

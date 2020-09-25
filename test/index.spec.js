@@ -84,6 +84,23 @@ describe('ObjectBatcher', function () {
       expect(this.batches[0].data[5]).to.eql({ foo: 5 });
     });
 
+    it('should call callback when batch size is smaller than 10 but prefetchCount is reached', function () {
+      const objectBatcher = new ObjectBatcher(this.callback, { ...options, prefetchCount: 8 });
+
+      for (var i = 0; i < 7; i++) {
+        objectBatcher.add(primaryKey, { foo: i });
+      }
+
+      for (var i = 1; i < 7; i++) {
+        objectBatcher.add(primaryKey2, { bar: i });
+      }
+
+      expect(this.batches.length).to.eql(1);
+      expect(this.batches[0].primaryKey).to.eql(primaryKey);
+      expect(this.batches[0].data.length).to.eql(7);
+      expect(this.batches[0].data[6]).to.eql({ foo: 6 });
+    });
+
     it('should call callback after batch timeout', function () {
       this.objectBatcher.add(primaryKey, { foo: 0 });
 
